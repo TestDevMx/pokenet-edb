@@ -32,6 +32,15 @@ export const routes: Routes = [
             inject(PokenetService).pokemonById(route.paramMap.get('id') ?? '0'),
         },
       },
+      {
+        path: pokemonRoutes.favorites.path,
+        title: pokemonRoutes.favorites.title,
+        loadComponent: () =>
+          import('@landing/pokenet/favorites/favorites.component'),
+        resolve: {
+          pokemonDetail: () => inject(PokenetService).favoritePokemons(),
+        },
+      },
     ],
   },
   {

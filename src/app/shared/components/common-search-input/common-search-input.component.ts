@@ -6,7 +6,7 @@ import {
   OnInit,
   inject,
 } from '@angular/core';
-import { NgIf } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -30,6 +30,7 @@ import { CommonSearchInputService } from '@shared/components/common-search-input
   standalone: true,
   imports: [
     NgIf,
+    AsyncPipe,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatButtonModule,
@@ -45,9 +46,11 @@ export class CommonSearchInputComponent implements OnInit, OnDestroy {
   @Input() debounce: number = 350;
 
   searchCtrl: FormControl = new FormControl();
+  showInput$ = this.searchUtilitySrv.showInput$;
 
   private readonly unsubscribe$ = new Subject<void>();
-  private readonly searchUtilitySrv = inject(CommonSearchInputService);
+
+  constructor(private readonly searchUtilitySrv: CommonSearchInputService) {}
 
   ngOnInit(): void {
     this.loadInitConfig();

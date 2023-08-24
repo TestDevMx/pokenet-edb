@@ -14,7 +14,6 @@ import { Subject, switchMap, takeUntil } from 'rxjs';
 import { PokenetService } from '@landing/pokenet/pokenet.service';
 import { CommonSearchInputService } from '@shared/components/common-search-input/common-search-input.service';
 
-import { CommonSearchInputComponent } from '@shared/components/common-search-input/common-search-input.component';
 import { BasicPokemonCardComponent } from '@landing/pokenet/components/basic-pokemon-card/basic-pokemon-card.component';
 
 import { CommonNoInformationComponent } from '@app/shared/components/common-no-information/common-no-information.component';
@@ -25,7 +24,6 @@ import { CommonNoInformationComponent } from '@app/shared/components/common-no-i
   imports: [
     CommonModule,
     MatPaginatorModule,
-    CommonSearchInputComponent,
     BasicPokemonCardComponent,
     CommonNoInformationComponent,
   ],
@@ -47,11 +45,13 @@ export default class ListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.searchByIdOrName();
+    this.searchUtilitySrv.showInput = true;
   }
 
   ngOnDestroy(): void {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+    this.searchUtilitySrv.showInput = false;
   }
 
   searchByIdOrName() {

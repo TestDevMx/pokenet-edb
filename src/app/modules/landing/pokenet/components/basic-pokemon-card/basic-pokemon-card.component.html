@@ -14,11 +14,11 @@
     </mat-card-header>
 
     <mat-card-actions class="flex items-center w-full justify-between border-t divide-x p-3">
-        <button mat-button>
+        <button mat-button (click)="addToFavorite(pokemon)">
             <mat-icon>star_border</mat-icon>
             <span class="">Favoritos</span>
         </button>
-        <a mat-button [routerLink]="[pokemon.id]">
+        <a mat-button (click)="navigate(pokemon.id)">
             <mat-icon>info</mat-icon>
             <span class="">Detalle</span>
         </a>

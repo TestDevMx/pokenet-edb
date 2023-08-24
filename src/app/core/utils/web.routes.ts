@@ -3,6 +3,10 @@ export const WEB_ROUTES = {
   pokemon: {
     path: 'pokemon/list',
     title: 'Pokémon List',
+    favorites: {
+      path: 'pokemon/favorites',
+      title: 'Pokémon favorites',
+    },
   },
   errors: {
     root_path: 'error',
