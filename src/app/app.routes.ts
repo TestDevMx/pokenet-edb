@@ -1,18 +1,19 @@
-import { Routes } from '@angular/router';
+import { ActivatedRouteSnapshot, Routes } from '@angular/router';
 import { inject } from '@angular/core';
 
 import { PokenetService } from '@landing/pokenet/pokenet.service';
 
-import { LayoutComponent } from '@layout/layout.component';
+import { AppComponent } from '@app/app.component';
 
 import { WEB_ROUTES } from '@core/utils/web.routes';
+
 const errorRoutes = WEB_ROUTES.errors;
 const pokemonRoutes = WEB_ROUTES.pokemon;
 
 export const routes: Routes = [
   {
     path: '',
-    component: LayoutComponent,
+    component: AppComponent,
     children: [
       { path: '', pathMatch: 'full', redirectTo: pokemonRoutes.path },
       {
@@ -24,19 +25,29 @@ export const routes: Routes = [
       {
         path: `${pokemonRoutes.path}/:id`,
         title: pokemonRoutes.title,
-        loadComponent: () => import('@landing/pokenet/list.component'),
+        loadComponent: () =>
+          import('@landing/pokenet/details/details.component'),
+        resolve: {
+          pokemonDetail: (route: ActivatedRouteSnapshot) =>
+            inject(PokenetService).pokemonById(route.paramMap.get('id') ?? '0'),
+        },
       },
     ],
   },
   {
     path: errorRoutes.root_path,
-    component: LayoutComponent,
+    component: AppComponent,
     children: [
       { path: '', pathMatch: 'full', redirectTo: errorRoutes.e404.path },
       {
         path: errorRoutes.e404.path,
         title: errorRoutes.e404.title,
         loadComponent: () => import('@errors/e404/e404.component'),
+      },
+      {
+        path: errorRoutes.e500.path,
+        title: errorRoutes.e500.title,
+        loadComponent: () => import('@errors/e500/e500.component'),
       },
     ],
   },

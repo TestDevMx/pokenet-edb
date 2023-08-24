@@ -1,19 +1,26 @@
-<mat-card class="example-card">
-    <mat-card-header>
-        <div mat-card-avatar class="example-header-image"></div>
-        <mat-card-title>{{name}}</mat-card-title>
-        <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+<mat-card
+    class="flex flex-col flex-auto items-center filter-info border rounded-2xl overflow-hidden animate__animated animate__fadeIn  hover:shadow-xl">
+    <mat-card-header class="flex flex-col flex-auto w-full p-8 text-center mb-5">
+        <div mat-card-avatar
+            class="w-32 h-32 object-cover rounded-full border shadow-sm animate__animated animate__bounceIn">
+            <img mat-card-image [src]="pokemon.sprites.front_shiny" [alt]="pokemon.name">
+        </div>
+
+        <div class="w-48 h-48 mx-auto overflow-hidden">
+            <img class="w-full h-full object-fill" [src]="pokemon.sprites.other?.dream_world?.front_default">
+        </div>
+        <div class="mt-6 font-medium">{{pokemon.name | uppercase }}</div>
+        <div class="text-secondary">No. {{pokemon.id}}</div>
     </mat-card-header>
-    <img mat-card-image [src]="urlSrc" [alt]="name">
-    <mat-card-content>
-        <p>
-            The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-            A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-            bred for hunting.
-        </p>
-    </mat-card-content>
-    <mat-card-actions>
-        <button mat-button>Agregar a favoritos</button>
-        <button mat-button>Ver detalle</button>
+
+    <mat-card-actions class="flex items-center w-full justify-between border-t divide-x p-3">
+        <button mat-button>
+            <mat-icon>star_border</mat-icon>
+            <span class="">Favoritos</span>
+        </button>
+        <a mat-button [routerLink]="[pokemon.id]">
+            <mat-icon>info</mat-icon>
+            <span class="">Detalle</span>
+        </a>
     </mat-card-actions>
 </mat-card>

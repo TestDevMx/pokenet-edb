@@ -7,5 +7,6 @@ export const WEB_ROUTES = {
   errors: {
     root_path: 'error',
     e404: { path: '404', title: 'Not Found' },
+    e500: { path: '500', title: 'Internal Server' },
   },
 };

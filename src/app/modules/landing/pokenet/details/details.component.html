@@ -1,1 +1,39 @@
-<p>details works!</p>
+<ng-container *ngIf="(pokemon$ | async) as pokemon; else noPokemonInfo">
+
+    <div
+        class="flex flex-col md:flex-row max-w-80 md:max-w-160 w-full p-5 border rounded-md shadow mt-6 animate__animated animate__fadeIn">
+        <div class="flex-0 w-80 md:w-60">
+            <img class="w-full h-full object-fill" [src]="pokemon.sprites.other?.dream_world?.front_default"
+                alt="Card cover image">
+        </div>
+        <div class="flex flex-col flex-auto m-8 mb-4">
+            <div class="flex flex-col md:flex-row items-baseline justify-between">
+                <div class="text-2xl font-semibold">{{pokemon.name | uppercase}}</div>
+                <div class="text-3xl font-semibold mt-4 md:mt-0 md:ml-6">No. {{pokemon.id}}</div>
+            </div>
+            <div class="text-lg text-secondary mt-6">
+                Características
+            </div>
+            <div class="flex flex-col mt-4">
+                <div class="max-w-12 w-full whitespace-nowrap">Peso: {{pokemon.weight}}</div>
+                <div class="max-w-12 w-full whitespace-nowrap">Altura: {{pokemon.height}}</div>
+                <app-common-progress-bar text="Hp" [value]="pokemon.stats[0].base_stat" />
+                <app-common-progress-bar text="Ataque" [value]="pokemon.stats[1].base_stat" />
+                <app-common-progress-bar text="Defensa" [value]="pokemon.stats[2].base_stat" />
+                <app-common-progress-bar text="Ataque especial" [value]="pokemon.stats[3].base_stat" />
+                <app-common-progress-bar text="Defensa especial" [value]="pokemon.stats[4].base_stat" />
+                <app-common-progress-bar text="Velocidad" [value]="pokemon.stats[5].base_stat" />
+            </div>
+            <hr class="w-full border-b mt-6 mb-4">
+            <div class="flex items-center justify-end md:mt-auto -mx-3">
+                <a mat-icon-button matTooltip="Regresar al listado" routerLink="">
+                    <mat-icon class="icon-size-5 text-hint">arrow_back</mat-icon>
+                </a>
+            </div>
+        </div>
+    </div>
+</ng-container>
+
+<ng-template #noPokemonInfo>
+    <app-common-no-information />
+</ng-template>

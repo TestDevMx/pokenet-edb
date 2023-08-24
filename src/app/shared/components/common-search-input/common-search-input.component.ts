@@ -1,11 +1,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
   Input,
   OnDestroy,
   OnInit,
-  Output,
+  inject,
 } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -15,7 +14,16 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
-import { Subject, debounceTime, distinctUntilChanged, map } from 'rxjs';
+
+import {
+  Subject,
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  takeUntil,
+} from 'rxjs';
+
+import { CommonSearchInputService } from '@shared/components/common-search-input/common-search-input.service';
 
 @Component({
   selector: 'app-common-search-input',
@@ -35,11 +43,11 @@ import { Subject, debounceTime, distinctUntilChanged, map } from 'rxjs';
 export class CommonSearchInputComponent implements OnInit, OnDestroy {
   @Input() placeholder: string = 'Buscar por Id o nombre ...';
   @Input() debounce: number = 350;
-  @Output() search = new EventEmitter<string>();
 
   searchCtrl: FormControl = new FormControl();
 
   private readonly unsubscribe$ = new Subject<void>();
+  private readonly searchUtilitySrv = inject(CommonSearchInputService);
 
   ngOnInit(): void {
     this.loadInitConfig();
@@ -55,12 +63,13 @@ export class CommonSearchInputComponent implements OnInit, OnDestroy {
       .pipe(
         debounceTime(this.debounce),
         distinctUntilChanged(),
-        map((query: string) => query.trim() ?? '')
+        map((query: string) => query.trim() ?? ''),
+        takeUntil(this.unsubscribe$)
       )
-      .subscribe((query) => this.search.emit(query));
+      .subscribe((query) => (this.searchUtilitySrv.searchText = query));
   }
 
-  onSearch(value: string): void {
-    this.search.emit(value);
+  onSearch(query: string): void {
+    this.searchUtilitySrv.searchText = query;
   }
 }

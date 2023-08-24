@@ -17,6 +17,7 @@ import {
   of,
   range,
   switchMap,
+  take,
   tap,
   zip,
 } from 'rxjs';
@@ -25,52 +26,67 @@ import { RestApiService } from '@core/api/rest-api.service';
 
 import {
   PokemonListResponse,
+  PokemonPaginationList,
   PokemonResponse,
 } from '@landing/pokenet/pokenet.type';
 
 import { environment } from '@env/environment';
-import { HttpParams } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class PokenetService {
   private readonly restApiSrv = inject(RestApiService);
   private readonly pokemonRoute = environment.api.category.pokemon;
 
-  private readonly _pokemonList = new BehaviorSubject<PokemonResponse[] | null>(
-    null
-  );
-  private readonly _pokemon = new BehaviorSubject<PokemonResponse | null>(null);
+  private readonly _pokemonList =
+    new BehaviorSubject<PokemonPaginationList | null>(null);
 
-  pokemonByIdOrName(value: string): Observable<PokemonResponse> {
+  pokemonById(id: string): Observable<PokemonResponse> {
     return this.restApiSrv
-      .get<PokemonResponse>(`${this.pokemonRoute}/${value}`)
+      .get<PokemonResponse>(`${this.pokemonRoute}/${id}`)
       .pipe(catchError((error) => of(error)));
   }
 
-  pokemonList(offset: number = 0, limit: number = 10) {
+  searchByIdOrName(value: string): Observable<PokemonPaginationList> {
+    return this.restApiSrv
+      .get<PokemonResponse>(`${this.pokemonRoute}/${value.toLowerCase()}`)
+      .pipe(
+        map((response) => ({ count: 1, list: [response] })),
+        tap((response) => {
+          this._pokemonList.next(response);
+        }),
+        catchError((error) => {
+          this._pokemonList.next(null);
+          return of(error);
+        })
+      );
+  }
+
+  pokemonList(
+    offset: number = 0,
+    limit: number = 10
+  ): Observable<PokemonPaginationList> {
     return forkJoin({
       count: this.restApiSrv
         .get<PokemonListResponse>(this.pokemonRoute)
         .pipe(map(({ count }) => count)),
-      list: range(offset + 1, limit + offset).pipe(
+      list: range(offset + 1, limit).pipe(
         concatMap((id) =>
-          this.pokemonByIdOrName(<string>(<unknown>id)).pipe(
-            map((response) => of(response))
-          )
+          this.restApiSrv
+            .get<PokemonResponse>(`${this.pokemonRoute}/${id}`)
+            .pipe(map((response) => of(response)))
         ),
         combineLatestAll()
       ),
     }).pipe(
-      tap((r) => console.log('outer', r)),
-      catchError((error) => of(error))
+      tap((response) => this._pokemonList.next(response)),
+      catchError((error) => {
+        this._pokemonList.next(null);
+        return of(error);
+      })
     );
   }
 
   get pokemonList$() {
     return this._pokemonList.asObservable();
-  }
-
-  get pokemon$() {
-    return this._pokemon.asObservable();
   }
 }

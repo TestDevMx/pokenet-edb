@@ -184,3 +184,8 @@ export interface PokemonList {
   name: string;
   url: string;
 }
+
+export interface PokemonPaginationList {
+  count: number;
+  list: PokemonResponse[];
+}

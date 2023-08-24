@@ -1,18 +1,26 @@
-<app-common-search-input (search)="searchByIdOrName($event)" />
+<div class="w-full">
 
-<hr>
-<h1>Listado de pokemon</h1>
+    <ng-container *ngIf="(pokemonList$ | async) as pokemons; else noPokemonInfo;">
 
-<ng-container *ngIf="(pokemonList$ | async) as pokemons; else noPokemonInfo;">
+        <div class="w-full">
+            <div class="text-xl">Lista de Pokémon</div>
+            <div class="text-secondary"> {{pokemons.list.length | i18nPlural: counterMapping}}</div>
+        </div>
 
-    <!-- <ng-container *ngFor="let pokemon of pokemons.pokemonList ">
+        <div
+            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full min-w-0 mt-10 mb-8 animate__animated animate__fadeIn ">
+            <ng-container *ngIf="pokemons.list.length; else noPokemonInfo">
+                <ng-container *ngFor="let pokemon of pokemons.list; trackBy: trackById">
+                    <app-basic-pokemon-card [pokemon]="pokemon" />
+                </ng-container>
+            </ng-container>
+        </div>
 
-        <app-basic-pokemon-card [name]="pokemon.name" [urlSrc]="''" />
+        <mat-paginator class="shadow-2xl" *ngIf="pokemons.list.length > 1" [length]="pokemons.count" [pageSize]="10"
+            [pageSizeOptions]="[5, 10, 25]" (page)="paginationSearch($event)" />
     </ng-container>
 
-
-    <mat-paginator [length]="pokemons.count" [pageSize]="10" [pageSizeOptions]="[5, 10, 25]"
-        (page)="paginationSearch($event)" /> -->
-</ng-container>
-
-<ng-template #noPokemonInfo></ng-template>
+    <ng-template #noPokemonInfo>
+        <app-common-no-information />
+    </ng-template>
+</div>
