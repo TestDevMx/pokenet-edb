@@ -7,6 +7,7 @@ import {
 import { inject } from '@angular/core';
 
 import { Observable, catchError } from 'rxjs';
+
 import { ErrorHandlerService } from '@core/utils/error-handler.service';
 
 export const errorHandlerInterceptorFn: HttpInterceptorFn = (

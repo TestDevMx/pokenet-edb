@@ -4,9 +4,10 @@ import {
   HttpInterceptorFn,
   HttpRequest,
 } from '@angular/common/http';
-import { environment } from '@env/environment';
 
 import { Observable } from 'rxjs';
+
+import { environment } from '@env/environment';
 
 export const httpBaseApiRouteInterceptorFn: HttpInterceptorFn = (
   req: HttpRequest<unknown>,
