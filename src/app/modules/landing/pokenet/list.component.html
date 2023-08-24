@@ -1,0 +1,18 @@
+<app-common-search-input (search)="searchByIdOrName($event)" />
+
+<hr>
+<h1>Listado de pokemon</h1>
+
+<ng-container *ngIf="(pokemonList$ | async) as pokemons; else noPokemonInfo;">
+
+    <!-- <ng-container *ngFor="let pokemon of pokemons.pokemonList ">
+
+        <app-basic-pokemon-card [name]="pokemon.name" [urlSrc]="''" />
+    </ng-container>
+
+
+    <mat-paginator [length]="pokemons.count" [pageSize]="10" [pageSizeOptions]="[5, 10, 25]"
+        (page)="paginationSearch($event)" /> -->
+</ng-container>
+
+<ng-template #noPokemonInfo></ng-template>

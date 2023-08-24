@@ -1,0 +1,13 @@
+<mat-form-field class="w-full min-w-50">
+
+    <input matInput #searchInputCtrl [autocomplete]="'off'" [formControl]="searchCtrl" [placeholder]="placeholder">
+    <button *ngIf="searchCtrl.value" mat-icon-button matSuffix aria-label="Limpiar" matTooltip="Limpiar"
+        (click)="searchCtrl.patchValue('')">
+        <mat-icon fontIcon="close"></mat-icon>
+    </button>
+</mat-form-field>
+
+<br>
+<button mat-icon-button color="primary" matTooltip="Buscar" (click)="onSearch(searchInputCtrl.value)">
+    <mat-icon fontIcon="search"></mat-icon>
+</button>
