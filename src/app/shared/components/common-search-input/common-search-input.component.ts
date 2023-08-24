@@ -21,6 +21,7 @@ import {
   distinctUntilChanged,
   map,
   takeUntil,
+  tap,
 } from 'rxjs';
 
 import { CommonSearchInputService } from '@shared/components/common-search-input/common-search-input.service';
@@ -46,7 +47,6 @@ export class CommonSearchInputComponent implements OnInit, OnDestroy {
   @Input() debounce: number = 350;
 
   searchCtrl: FormControl = new FormControl();
-  showInput$ = this.searchUtilitySrv.showInput$;
 
   private readonly unsubscribe$ = new Subject<void>();
 

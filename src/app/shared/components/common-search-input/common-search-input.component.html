@@ -1,4 +1,4 @@
-<div class="flex flex-row max-h-10 rounded-full" *ngIf="(showInput$ | async)">
+<div class="flex flex-row max-h-10 rounded-full">
     <mat-form-field appearance="outline">
         <input matInput #searchInputCtrl [autocomplete]="'off'" [formControl]="searchCtrl" [placeholder]="placeholder">
         <button mat-icon-button matTooltip="Buscar" class="mr-2 ml-2" matSuffix
